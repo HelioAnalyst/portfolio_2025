@@ -1,0 +1,157 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&family=Space+Grotesk:wght@400;500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand Colors */
+    --brand-aqua: 180 100% 63%; /* #58E6E6 */
+    --brand-plum: 264 46% 10%; /* #1A0E24 */
+    --text-dark: 0 0% 7%; /* #121212 */
+    --text-light: 210 20% 98%; /* #FAFBFC */
+
+    /* Light Theme - Clean & Modern */
+    --background: 0 0% 100%; /* Pure white */
+    --foreground: 0 0% 9%; /* Near black for better readability */
+    --card: 0 0% 100%; /* Pure white cards */
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --primary: 264 46% 10%; /* Brand plum */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 97%; /* Softer gray */
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96%; /* Lighter muted background */
+    --muted-foreground: 0 0% 50%; /* Better contrast */
+    --accent: 180 100% 63%; /* Brand aqua */
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 92%; /* Softer borders */
+    --input: 0 0% 94%; /* Cleaner input backgrounds */
+    --ring: 264 46% 10%; /* Brand plum */
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    /* Dark Theme - Sophisticated & Clean */
+    --background: 222 84% 4.9%; /* Deep dark blue-gray */
+    --foreground: 210 40% 98%; /* Clean white text */
+    --card: 222 84% 8%; /* Lighter card background for better contrast */
+    --card-foreground: 210 40% 98%;
+    --popover: 222 84% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 180 100% 63%; /* Brand aqua for primary actions */
+    --primary-foreground: 222 84% 4.9%;
+    --secondary: 217 32.6% 20%; /* Lighter secondary for better visibility */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 32.6% 20%; /* Lighter muted background */
+    --muted-foreground: 215 20.2% 80%; /* Much better contrast for muted text */
+    --accent: 180 100% 63%; /* Brand aqua */
+    --accent-foreground: 222 84% 4.9%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 32.6% 20%; /* More visible borders */
+    --input: 217 32.6% 20%; /* Lighter input backgrounds */
+    --ring: 180 100% 63%; /* Brand aqua for focus rings */
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    transition:
+      color 0.3s ease,
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+}
+
+@layer components {
+  /* Brand Typography */
+  .brand-wordmark {
+    font-family: "Outfit", system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-tagline {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(var(--brand-plum));
+  }
+
+  .dark .brand-tagline {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  /* Logo Hover Animation */
+  .logo-mark {
+    transition:
+      transform 300ms ease,
+      color 0.3s ease,
+      fill 0.3s ease;
+  }
+
+  .logo-mark:hover {
+    transform: rotate(6deg);
+  }
+
+  /* Smooth transitions for all interactive elements */
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    transition: all 0.3s ease;
+  }
+
+  /* Card transitions */
+  .card {
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  /* Brand Gradients */
+  .brand-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--brand-aqua)),
+      hsl(var(--brand-plum))
+    );
+  }
+
+  .brand-gradient-text {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--brand-aqua)),
+      hsl(var(--brand-plum))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
