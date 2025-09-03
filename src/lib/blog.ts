@@ -2027,16 +2027,35 @@ export function getRelatedPosts(
   return relatedPosts;
 }
 
-export function getCategories(): string[] {
-  const categories = [...new Set(blogPosts.map((post) => post.category))];
-  return categories.sort();
-}
+// src/lib/blog.ts
 
-export function getTags(): string[] {
-  const allTags = blogPosts.flatMap((post) => post.tags);
-  const uniqueTags = [...new Set(allTags)];
-  return uniqueTags.sort();
-}
+export function getCategories(): string[] {
+    // Dedupe without Set/spread
+    const seen: Record<string, true> = Object.create(null);
+    for (let i = 0; i < blogPosts.length; i++) {
+      const cat = blogPosts[i].category;
+      if (cat) seen[cat] = true;
+    }
+    const categories = Object.keys(seen);
+    categories.sort();
+    return categories;
+  }
+  
+  export function getTags(): string[] {
+    // Replace flatMap + Set with simple loops
+    const seen: Record<string, true> = Object.create(null);
+    for (let i = 0; i < blogPosts.length; i++) {
+      const tags = blogPosts[i].tags || [];
+      for (let j = 0; j < tags.length; j++) {
+        const tag = tags[j];
+        if (tag) seen[tag] = true;
+      }
+    }
+    const uniqueTags = Object.keys(seen);
+    uniqueTags.sort();
+    return uniqueTags;
+  }
+  
 
 export function getPostStats() {
   return {

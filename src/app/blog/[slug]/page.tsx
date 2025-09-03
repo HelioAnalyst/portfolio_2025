@@ -7,7 +7,7 @@ import { getPostById } from "@/lib/blog";
 import SocialShareButtons from "@/components/SocialShareButtons";
 
 function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("en-US", {
+  return new Date(dateString).toLocaleDateString("en-GB", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -15,8 +15,6 @@ function formatDate(dateString: string) {
 }
 
 function renderMarkdownContent(content: string) {
-  // Simple markdown-like rendering for demo purposes
-  // In a real app, you'd use a proper markdown parser like react-markdown
   const lines = content.trim().split("\n");
   const elements: JSX.Element[] = [];
 
@@ -27,25 +25,21 @@ function renderMarkdownContent(content: string) {
       elements.push(
         <h1 key={i} className="text-3xl font-bold text-foreground mt-8 mb-4">
           {line.slice(2)}
-        </h1>,
+        </h1>
       );
     } else if (line.startsWith("## ")) {
       elements.push(
-        <h2
-          key={i}
-          className="text-2xl font-semibold text-foreground mt-6 mb-3"
-        >
+        <h2 key={i} className="text-2xl font-semibold text-foreground mt-6 mb-3">
           {line.slice(3)}
-        </h2>,
+        </h2>
       );
     } else if (line.startsWith("### ")) {
       elements.push(
         <h3 key={i} className="text-xl font-semibold text-foreground mt-4 mb-2">
           {line.slice(4)}
-        </h3>,
+        </h3>
       );
     } else if (line.startsWith("```")) {
-      // Find the end of code block
       let codeContent = "";
       let j = i + 1;
       while (j < lines.length && !lines[j].startsWith("```")) {
@@ -55,16 +49,16 @@ function renderMarkdownContent(content: string) {
       elements.push(
         <pre key={i} className="bg-muted p-4 rounded-lg overflow-x-auto my-4">
           <code className="text-sm">{codeContent}</code>
-        </pre>,
+        </pre>
       );
-      i = j; // Skip to end of code block
+      i = j; // jump to end of code block
     } else if (line.trim() === "") {
       elements.push(<br key={i} />);
     } else {
       elements.push(
         <p key={i} className="text-foreground/90 leading-relaxed mb-4">
           {line}
-        </p>,
+        </p>
       );
     }
   }
@@ -86,15 +80,16 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       {/* Header */}
       <div className="bg-gradient-to-br from-primary/5 via-background to-accent/5 border-b border-border">
         <div className="container mx-auto px-4 py-8">
-          <Link href="/blog">
-            <Button
-              variant="ghost"
-              className="mb-6 p-0 h-auto font-medium text-primary hover:text-primary/80"
-            >
+          <Button
+            asChild
+            variant="ghost"
+            className="mb-6 p-0 h-auto font-medium text-primary hover:text-primary/80"
+          >
+            <Link href="/blog">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Blog
-            </Button>
-          </Link>
+            </Link>
+          </Button>
 
           <div className="max-w-4xl">
             <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
@@ -142,6 +137,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               src={post.image}
               alt={post.title}
               className="w-full h-full object-cover"
+              loading="lazy"
             />
           </div>
         </div>
@@ -152,9 +148,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="max-w-4xl mx-auto">
           <Card className="bg-card">
             <CardHeader className="pb-8">
-              <div className="prose prose-lg max-w-none">
-                {/* Article content would go here */}
-              </div>
+              <div className="prose prose-lg max-w-none" />
             </CardHeader>
             <CardContent className="prose prose-lg max-w-none">
               <div className="space-y-4">
@@ -166,12 +160,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           {/* Navigation */}
           <div className="mt-12 pt-8 border-t border-border">
             <div className="flex justify-between items-center">
-              <Link href="/blog">
-                <Button variant="outline">
+              <Button asChild variant="outline">
+                <Link href="/blog">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   All Posts
-                </Button>
-              </Link>
+                </Link>
+              </Button>
 
               <div className="flex gap-2">
                 <SocialShareButtons

@@ -10,8 +10,11 @@ import { Calendar, Clock, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { getAllPosts, getFeaturedPosts } from "@/lib/blog";
 
+// Type the post from your data source shape
+type BlogPost = ReturnType<typeof getAllPosts>[number];
+
 function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("en-US", {
+  return new Date(dateString).toLocaleDateString("en-GB", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -22,26 +25,33 @@ function BlogPostCard({
   post,
   featured = false,
 }: {
-  post: (typeof blogPosts)[0];
+  post: BlogPost;
   featured?: boolean;
 }) {
   return (
     <Card
-      className={`group hover:shadow-lg transition-all duration-300 bg-card ${featured ? "md:col-span-2 lg:col-span-3" : ""}`}
+      className={`group hover:shadow-lg transition-all duration-300 bg-card ${
+        featured ? "md:col-span-2 lg:col-span-3" : ""
+      }`}
     >
-      <div className={`${featured ? "md:flex" : ""}`}>
-        <div className={`${featured ? "md:w-1/2" : ""}`}>
-          <div className="aspect-video overflow-hidden rounded-t-xl ${featured ? 'md:rounded-l-xl md:rounded-tr-none' : ''}">
+      <div className={featured ? "md:flex" : ""}>
+        <div className={featured ? "md:w-1/2" : ""}>
+          <div
+            className={`aspect-video overflow-hidden rounded-t-xl ${
+              featured ? "md:rounded-l-xl md:rounded-tr-none" : ""
+            }`}
+          >
             <img
               src={post.image}
               alt={post.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
             />
           </div>
         </div>
-        <div className={`${featured ? "md:w-1/2" : ""}`}>
+        <div className={featured ? "md:w-1/2" : ""}>
           <CardHeader className={featured ? "pb-4" : ""}>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-2">
               <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
                 {post.category}
               </span>
@@ -55,7 +65,9 @@ function BlogPostCard({
               </div>
             </div>
             <CardTitle
-              className={`group-hover:text-primary transition-colors ${featured ? "text-2xl" : "text-xl"}`}
+              className={`group-hover:text-primary transition-colors ${
+                featured ? "text-2xl" : "text-xl"
+              }`}
             >
               {post.title}
             </CardTitle>
@@ -64,15 +76,16 @@ function BlogPostCard({
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-0">
-            <Link href={`/blog/${post.id}`}>
-              <Button
-                variant="ghost"
-                className="group/btn p-0 h-auto font-medium text-primary hover:text-primary/80"
-              >
+            <Button
+              asChild
+              variant="ghost"
+              className="group/btn p-0 h-auto font-medium text-primary hover:text-primary/80"
+            >
+              <Link href={`/blog/${post.id}`}>
                 Read more
                 <ArrowRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </CardContent>
         </div>
       </div>
@@ -85,6 +98,12 @@ export default function BlogPage() {
   const featuredPosts = getFeaturedPosts();
   const featuredPost = featuredPosts[0];
   const regularPosts = allPosts.filter((post) => !post.featured);
+
+  // ---- No-Set category dedupe (compatible with older TS targets) ----
+  const categoryMap: Record<string, true> = {};
+  for (const p of allPosts) categoryMap[p.category] = true;
+  const categories = Object.keys(categoryMap).sort();
+  // -------------------------------------------------------------------
 
   return (
     <div className="min-h-screen bg-background">
@@ -113,7 +132,7 @@ export default function BlogPage() {
               Featured Post
             </h2>
             <div className="grid grid-cols-1">
-              <BlogPostCard post={featuredPost} featured={true} />
+              <BlogPostCard post={featuredPost} featured />
             </div>
           </div>
         )}
@@ -136,17 +155,11 @@ export default function BlogPage() {
             Categories
           </h2>
           <div className="flex flex-wrap gap-3">
-            {Array.from(new Set(allPosts.map((post) => post.category))).map(
-              (category) => (
-                <Button
-                  key={category}
-                  variant="outline"
-                  className="rounded-full"
-                >
-                  {category}
-                </Button>
-              ),
-            )}
+            {categories.map((category) => (
+              <Button key={category} variant="outline" className="rounded-full">
+                {category}
+              </Button>
+            ))}
           </div>
         </div>
       </div>
